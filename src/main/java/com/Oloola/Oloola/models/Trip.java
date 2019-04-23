@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,4 +20,29 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    Truck truck;
+
+    Driver driver;
+
+    AppUser transporter;
+
+    AppUser cargoMover;
+
+    LocalDate firstAvailableDate;
+
+    LocalDate lastAvailableDate;
+
+    String cargoType;
+
+    Double availableTonage;
+
+    Location tripStart;
+
+    Location tripDestination;
+
+    Location collectionPoint;
+
+    Location dropOffPoint;
+
 }

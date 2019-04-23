@@ -1,7 +1,6 @@
 package com.Oloola.Oloola.services;
 
-import com.Oloola.Oloola.repository.DriverRepository;
-import com.Oloola.Oloola.repository.TruckRepository;
+import com.Oloola.Oloola.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +11,19 @@ import org.springframework.validation.annotation.Validated;
 @Slf4j
 @Transactional
 @Validated
-public class DriverService {
+public class TripService {
+    TripRepository tripRepository;
     DriverRepository driverRepository;
     TruckRepository truckRepository;
-
+    UserRepository userRepository;
+    LocationRepository locationRepository;
 
     @Autowired
-    public DriverService(DriverRepository driverRepository, TruckRepository truckRepository) {
+    public TripService(TripRepository tripRepository, DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository, LocationRepository locationRepository) {
+        this.tripRepository = tripRepository;
         this.driverRepository = driverRepository;
         this.truckRepository = truckRepository;
+        this.userRepository = userRepository;
+        this.locationRepository = locationRepository;
     }
 }
