@@ -27,19 +27,19 @@ public class Trip {
 
     AppUser transporter;
 
-    AppUser cargoMover;
-
     LocalDate firstAvailableDate;
 
     LocalDate lastAvailableDate;
-
-    String cargoType;
 
     Double availableTonage;
 
     Location tripStart;
 
     Location tripDestination;
+
+    AppUser cargoMover;
+
+    String cargoType;
 
     Location collectionPoint;
 
