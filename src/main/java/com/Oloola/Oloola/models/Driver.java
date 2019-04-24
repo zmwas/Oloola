@@ -32,4 +32,6 @@ public class Driver {
     String passPortPhotoUrl;
 
     Truck truck;
+
+    AppUser transporter;
 }

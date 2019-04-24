@@ -1,7 +1,10 @@
 package com.Oloola.Oloola.repository;
 
 import com.Oloola.Oloola.models.Truck;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TruckRepository  extends PagingAndSortingRepository<Truck, Long> {
+import java.util.List;
+
+public interface TruckRepository  extends JpaRepository<Truck, Long> {
+    List<Truck> findByTransporter();
 }

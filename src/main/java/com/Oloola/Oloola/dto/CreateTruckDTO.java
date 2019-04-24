@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.dto;
 
+import com.Oloola.Oloola.models.AppUser;
 import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Truck;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,12 @@ public class CreateTruckDTO {
 
     String ntsaCertificateNumber;
 
-    public Truck from(Driver driver) {
+    String transporterId;
+
+    public Truck from(Driver driver, AppUser transporter) {
         Truck truck = new Truck();
         truck.setDriver(driver);
+        truck.setTransporter(transporter);
         truck.setAvailableTonage(availableTonage);
         truck.setInsuranceSticker(insuranceSticker);
         truck.setLicensePlateNumber(licensePlateNumber);

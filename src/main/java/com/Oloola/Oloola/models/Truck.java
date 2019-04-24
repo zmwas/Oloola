@@ -21,6 +21,8 @@ public class Truck {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    AppUser transporter;
+
     String licensePlateNumber;
 
     Driver driver;

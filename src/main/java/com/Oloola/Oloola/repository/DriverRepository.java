@@ -1,7 +1,11 @@
 package com.Oloola.Oloola.repository;
 
+import com.Oloola.Oloola.models.AppUser;
 import com.Oloola.Oloola.models.Driver;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DriverRepository extends PagingAndSortingRepository<Driver, Long> {
+import java.util.List;
+
+public interface DriverRepository extends JpaRepository<Driver, Long> {
+    List<Driver> findByTransporter(AppUser transporter);
 }

@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.dto;
 
+import com.Oloola.Oloola.models.AppUser;
 import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Truck;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,12 @@ public class CreateDriverDTO {
 
     Long truckId;
 
-    public Driver from(Truck truck) {
+    Long transporterId;
+
+    public Driver from(Truck truck, AppUser transporter) {
         Driver driver = new Driver();
         driver.setTruck(truck);
+        driver.setTransporter(transporter);
         driver.setDrivingLicense(drivingLicense);
         driver.setDrivingLicenseType(drivingLicenseType);
         driver.setName(name);
