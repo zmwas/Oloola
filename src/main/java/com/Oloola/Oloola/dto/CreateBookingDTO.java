@@ -20,9 +20,9 @@ public class CreateBookingDTO {
 
     String dropOffPoint;
 
+    String tripId;
 
-    public Trip from(Location collectionPoint, Location dropOffPoint) {
-        Trip trip = new Trip();
+    public Trip from(Trip trip, Location collectionPoint, Location dropOffPoint) {
         trip.setCollectionPoint(collectionPoint);
         trip.setDropOffPoint(dropOffPoint);
         trip.setCargoType(cargoType);

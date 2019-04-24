@@ -47,12 +47,21 @@ public class TripService {
     public Trip saveTripBooking(CreateBookingDTO createBookingDTO) {
         Location collectionPoint = fetchLocation(createBookingDTO.getCollectionPoint());
         Location dropOffPoint = fetchLocation(createBookingDTO.getDropOffPoint());
-        Trip trip = createBookingDTO.from(collectionPoint,dropOffPoint);
+        Trip emptyTrip = findEmptyTrip(createBookingDTO.getTripId());
+        Trip trip = createBookingDTO.from(emptyTrip, collectionPoint, dropOffPoint);
         return tripRepository.save(trip);
     }
 
+    private Trip findEmptyTrip(String id) {
+        Optional<Trip> trip = tripRepository.findById(Long.valueOf(id));
+        if (!trip.isPresent()) {
+            throw new NotFoundException("Trip", String.valueOf(id));
+        }
+        return trip.get();
+    }
 
-    public Driver fetchDriver(Long id) {
+
+    private Driver fetchDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
         if (!driver.isPresent()) {
             throw new NotFoundException("Driver", String.valueOf(id));
@@ -61,7 +70,7 @@ public class TripService {
     }
 
 
-    public Truck fetchTruck(Long truckId) {
+    private Truck fetchTruck(Long truckId) {
         Optional<Truck> truck = truckRepository.findById(truckId);
         if (!truck.isPresent()) {
             throw new NotFoundException("truck", String.valueOf(truckId));
@@ -69,7 +78,7 @@ public class TripService {
         return truck.get();
     }
 
-    public AppUser fetchUser(Long userId) {
+    private AppUser fetchUser(Long userId) {
         Optional<AppUser> user = userRepository.findById(userId);
         if (!user.isPresent()) {
             throw new NotFoundException("User", String.valueOf(userId));
@@ -77,7 +86,7 @@ public class TripService {
         return user.get();
     }
 
-    public Location fetchLocation(String name) {
+    private Location fetchLocation(String name) {
         Optional<Location> location = locationRepository.findByName(name);
         return location.orElseGet(() -> createNewLocation(name));
     }
@@ -87,5 +96,4 @@ public class TripService {
         location.setName(name);
         return locationRepository.save(location);
     }
-
 }
