@@ -46,4 +46,6 @@ public class Trip {
     Location dropOffPoint;
 
     Double transportFees;
+
+    Boolean isAvailable;
 }
