@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.dto;
 
+import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Truck;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,18 @@ public class CreateDriverDTO {
 
     String passPortPhotoUrl;
 
-    String truckId;
+    Long truckId;
+
+    public Driver from(Truck truck) {
+        Driver driver = new Driver();
+        driver.setTruck(truck);
+        driver.setDrivingLicense(drivingLicense);
+        driver.setDrivingLicenseType(drivingLicenseType);
+        driver.setName(name);
+        driver.setPassPortPhotoUrl(passPortPhotoUrl);
+        driver.setIdNumber(idNumber);
+        return driver;
+    }
+
 
 }

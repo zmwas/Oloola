@@ -1,6 +1,7 @@
 package com.Oloola.Oloola.dto;
 
 
+import com.Oloola.Oloola.models.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,14 @@ public class CreateUserDTO {
 
     String role;
 
+    public AppUser from() {
+        AppUser appUser = new AppUser();
+        appUser.setCompanyName(companyName);
+        appUser.setEmail(email);
+        appUser.setKraPin(kraPin);
+        appUser.setPhoneNumber(phoneNumber);
+        appUser.setPassword(password);
+        appUser.setRole(role);
+        return appUser;
+    }
 }

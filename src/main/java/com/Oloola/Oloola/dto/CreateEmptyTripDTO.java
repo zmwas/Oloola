@@ -1,9 +1,6 @@
 package com.Oloola.Oloola.dto;
 
-import com.Oloola.Oloola.models.AppUser;
-import com.Oloola.Oloola.models.Driver;
-import com.Oloola.Oloola.models.Location;
-import com.Oloola.Oloola.models.Truck;
+import com.Oloola.Oloola.models.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CreateEmptyTripDTO {
 
-    String truckId;
+    Long truckId;
 
-    String driverId;
+    Long driverId;
 
     LocalDate firstAvailableDate;
 
@@ -30,5 +27,18 @@ public class CreateEmptyTripDTO {
     String tripStart;
 
     String tripDestination;
+
+    public Trip from(Truck truck, Driver driver, Location tripStart, Location destination, AppUser transporter) {
+        Trip trip = new Trip();
+        trip.setTransporter(transporter);
+        trip.setTruck(truck);
+        trip.setDriver(driver);
+        trip.setTripStart(tripStart);
+        trip.setTripDestination(destination);
+        trip.setFirstAvailableDate(firstAvailableDate);
+        trip.setLastAvailableDate(lastAvailableDate);
+        trip.setAvailableTonage(availableTonage);
+        return trip;
+    }
 
 }
