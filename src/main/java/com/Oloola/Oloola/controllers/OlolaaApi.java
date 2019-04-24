@@ -6,9 +6,9 @@ import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Trip;
 import com.Oloola.Oloola.models.Truck;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("api/v1/ololaa")
 public interface OlolaaApi {
@@ -17,7 +17,7 @@ public interface OlolaaApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<AppUser> signUp(
-           @RequestBody CreateUserDTO body
+            @RequestBody CreateUserDTO body
 
     );
 
@@ -56,5 +56,26 @@ public interface OlolaaApi {
             @RequestBody CreateDriverDTO body
     );
 
+    @RequestMapping(value = "/driver",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Driver>> fetchDrivers(
+    );
 
+    @RequestMapping(value = "/truck",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Truck>> fetchTrucks(
+    );
+
+    @RequestMapping(value = "/trip",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Trip>> fetchTripsForLocation(
+            @RequestParam String startLocation, @RequestParam String destination
+
+    );
 }

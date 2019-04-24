@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class OlolaaApiController implements OlolaaApi {
 
@@ -56,5 +58,20 @@ public class OlolaaApiController implements OlolaaApi {
     public ResponseEntity<Driver> createDriver(CreateDriverDTO body) {
         Driver driver = driverService.registerDriver(body);
         return new ResponseEntity<>(driver, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<List<Driver>> fetchDrivers() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<Truck>> fetchTrucks() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<Trip>> fetchTripsForLocation(String startLocation, String destination) {
+        return null;
     }
 }
