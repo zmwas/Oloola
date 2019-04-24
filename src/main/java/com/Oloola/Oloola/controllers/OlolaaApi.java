@@ -1,7 +1,60 @@
 package com.Oloola.Oloola.controllers;
 
+import com.Oloola.Oloola.dto.*;
+import com.Oloola.Oloola.models.AppUser;
+import com.Oloola.Oloola.models.Driver;
+import com.Oloola.Oloola.models.Trip;
+import com.Oloola.Oloola.models.Truck;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @RequestMapping("api/v1/ololaa")
 public interface OlolaaApi {
+    @RequestMapping(value = "/signUp",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<AppUser> signUp(
+           @RequestBody CreateUserDTO body
+
+    );
+
+    @RequestMapping(value = "/trip",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<Trip> createEmptyTrip(
+            @RequestBody CreateEmptyTripDTO body
+
+    );
+
+    @RequestMapping(value = "/booking",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<Trip> createBooking(
+            @RequestBody CreateBookingDTO body
+
+    );
+
+    @RequestMapping(value = "/truck",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<Truck> createTruck(
+            @RequestBody CreateTruckDTO body
+
+    );
+
+    @RequestMapping(value = "/driver",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<Driver> createDriver(
+            @RequestBody CreateDriverDTO body
+    );
+
+
 }
