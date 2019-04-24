@@ -47,5 +47,5 @@ public class Trip {
 
     Double transportFees;
 
-    Boolean isAvailable;
+    Boolean isAvailable = true;
 }
