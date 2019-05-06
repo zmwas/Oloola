@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -20,11 +17,14 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @OneToOne
     Truck truck;
 
+    @OneToOne
     Driver driver;
 
+    @ManyToOne()
+    @PrimaryKeyJoinColumn
     AppUser transporter;
 
     LocalDate firstAvailableDate;
@@ -33,16 +33,22 @@ public class Trip {
 
     Double availableTonage;
 
+    @OneToOne
     Location tripStart;
 
+    @OneToOne
     Location tripDestination;
 
+    @ManyToOne()
+    @PrimaryKeyJoinColumn
     AppUser cargoMover;
 
     String cargoType;
 
+    @OneToOne
     Location collectionPoint;
 
+    @OneToOne
     Location dropOffPoint;
 
     Double transportFees;

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,7 +62,11 @@ public class TripService {
         return trip.get();
     }
 
+    public List<Trip> findClosestTrips(Location collectionPoint) {
+        List<Trip> trips = new ArrayList<>();
 
+        return trips;
+    }
     private Driver fetchDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
         if (!driver.isPresent()) {
