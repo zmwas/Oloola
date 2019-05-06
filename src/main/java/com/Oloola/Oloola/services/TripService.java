@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,10 +69,11 @@ public class TripService {
         return trip.get();
     }
 
-    public List<Trip> findClosestTrips(Location collectionPoint) {
+    public List<GeoResult<Trip>> findClosestTrips(Location collectionPoint) {
         Distance distance = new Distance(10, Metrics.KILOMETERS);
-        return tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
+        List<GeoResult<Trip>> results = tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
                 , collectionPoint.getPoint());
+        return results;
     }
 
     private Driver fetchDriver(Long id) {
