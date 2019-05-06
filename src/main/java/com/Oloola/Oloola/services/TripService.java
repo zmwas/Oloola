@@ -5,12 +5,20 @@ import com.Oloola.Oloola.dto.CreateEmptyTripDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
 import com.Oloola.Oloola.models.*;
 import com.Oloola.Oloola.repository.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,10 +71,11 @@ public class TripService {
     }
 
     public List<Trip> findClosestTrips(Location collectionPoint) {
-        List<Trip> trips = new ArrayList<>();
-
-        return trips;
+        Distance distance = new Distance(10, Metrics.KILOMETERS);
+        return tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
+                , collectionPoint.getPoint());
     }
+
     private Driver fetchDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
         if (!driver.isPresent()) {
@@ -98,8 +107,30 @@ public class TripService {
     }
 
     private Location createNewLocation(String name) {
+
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyAi4p2tQS5Os5QovXlMdIKKhVH8WIUEEwA")
+                .build();
+        GeocodingResult[] results = new GeocodingResult[0];
+        try {
+            results = GeocodingApi.geocode(context,
+                    name).await();
+        } catch (ApiException | InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(results[0].addressComponents));
+
+        Double latitude = results[0].geometry.location.lat;
+        Double longitude = results[0].geometry.location.lng;
+
+        Point point = new Point(latitude, longitude);
         Location location = new Location();
         location.setName(name);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        location.setPoint(point);
+
         return locationRepository.save(location);
     }
 }
