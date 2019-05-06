@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Getter
 @Setter
@@ -18,9 +20,9 @@ public class CreateEmptyTripDTO {
 
     Long driverId;
 
-    LocalDate firstAvailableDate;
+    String firstAvailableDate;
 
-    LocalDate lastAvailableDate;
+    String lastAvailableDate;
 
     Double availableTonage;
 
@@ -35,10 +37,23 @@ public class CreateEmptyTripDTO {
         trip.setDriver(driver);
         trip.setTripStart(tripStart);
         trip.setTripDestination(destination);
-        trip.setFirstAvailableDate(firstAvailableDate);
-        trip.setLastAvailableDate(lastAvailableDate);
+        trip.setFirstAvailableDate(getDateFromString(firstAvailableDate));
+        trip.setLastAvailableDate(getDateFromString(lastAvailableDate));
         trip.setAvailableTonage(availableTonage);
         return trip;
+    }
+    private LocalDate getDateFromString(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate parsedDate = null;
+
+        try {
+            parsedDate = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+        }
+
+        return parsedDate;
     }
 
 }
