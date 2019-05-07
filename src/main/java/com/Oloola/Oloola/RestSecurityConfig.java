@@ -10,6 +10,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.headers().frameOptions().disable();
+        http.authorizeRequests().anyRequest().permitAll();
 
     }
 }

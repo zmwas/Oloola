@@ -11,14 +11,17 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,10 +72,10 @@ public class TripService {
         return trip.get();
     }
 
-    public List<GeoResult<Trip>> findClosestTrips(Location collectionPoint) {
-        Distance distance = new Distance(10, Metrics.KILOMETERS);
-        List<GeoResult<Trip>> results = tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
-                , collectionPoint.getPoint());
+    public List<Trip> findClosestTrips(Location collectionPoint) {
+        List<Trip> results = new ArrayList<>();
+//        List<GeoResult<Trip>> results = tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
+//                , collectionPoint.getPoint());
         return results;
     }
 
@@ -123,14 +126,15 @@ public class TripService {
 
         Double latitude = results[0].geometry.location.lat;
         Double longitude = results[0].geometry.location.lng;
-
-        Point point = new Point(latitude, longitude);
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Point point = geometryFactory.createPoint(new Coordinate(latitude, longitude));
         Location location = new Location();
         location.setName(name);
         location.setLatitude(latitude);
         location.setLongitude(longitude);
-        location.setPoint(point);
-
-        return locationRepository.save(location);
+        location.setCoordinates(point);
+        locationRepository.save(location);
+        System.out.println(locationRepository.findByName(name).get().getCoordinates());
+        return locationRepository.findByName(name).get();
     }
 }
