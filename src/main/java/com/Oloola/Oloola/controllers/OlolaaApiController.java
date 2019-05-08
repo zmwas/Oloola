@@ -1,10 +1,8 @@
 package com.Oloola.Oloola.controllers;
 
 import com.Oloola.Oloola.dto.*;
-import com.Oloola.Oloola.models.AppUser;
-import com.Oloola.Oloola.models.Driver;
-import com.Oloola.Oloola.models.Trip;
-import com.Oloola.Oloola.models.Truck;
+import com.Oloola.Oloola.models.*;
+import com.Oloola.Oloola.responses.AuthResponse;
 import com.Oloola.Oloola.services.DriverService;
 import com.Oloola.Oloola.services.TripService;
 import com.Oloola.Oloola.services.TruckService;
@@ -34,6 +32,15 @@ public class OlolaaApiController implements OlolaaApi {
     public ResponseEntity<AppUser> signUp(CreateUserDTO body) {
         AppUser appUser = userService.createUser(body);
         return new ResponseEntity<>(appUser, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<AuthResponse> login(AuthenticationRequest body) {
+        AuthResponse response = new AuthResponse();
+        Auth auth = userService.authenticateUser(body);
+        response.setSuccess(true);
+        response.setAuth(auth);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
