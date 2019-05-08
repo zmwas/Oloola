@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequestMapping("api/v1/ololaa")
 public interface OlolaaApi {
-    @RequestMapping(value = "/signUp",
+    @RequestMapping(value = "auth/signUp",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
@@ -22,7 +22,7 @@ public interface OlolaaApi {
 
     );
 
-    @RequestMapping(value = "/login",
+    @RequestMapping(value = "auth/login",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
