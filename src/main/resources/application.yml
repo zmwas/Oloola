@@ -1,8 +1,7 @@
 logging:
   level:
     org:
-      springframework: DEBUG
-      security: DEBUG
+      springframework:
     org.springframework.web: ERROR
 
 server.port: 8019
