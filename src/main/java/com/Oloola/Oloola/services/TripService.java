@@ -3,11 +3,9 @@ package com.Oloola.Oloola.services;
 import com.Oloola.Oloola.dto.CreateBookingDTO;
 import com.Oloola.Oloola.dto.CreateEmptyTripDTO;
 import com.Oloola.Oloola.dto.FilterTripsDTO;
+import com.Oloola.Oloola.dto.UpdatePriceDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
-import com.Oloola.Oloola.models.Driver;
-import com.Oloola.Oloola.models.Location;
-import com.Oloola.Oloola.models.Trip;
-import com.Oloola.Oloola.models.Truck;
+import com.Oloola.Oloola.models.*;
 import com.Oloola.Oloola.repository.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -85,6 +83,12 @@ public class TripService extends BaseService {
         }
 
         return results.get();
+    }
+
+    public Trip updatePrice(UpdatePriceDTO body) {
+        Trip trip = findEmptyTrip(body.getTripId());
+        trip.setTransportFees(body.getPrice());
+        return trip;
     }
 
     private Driver fetchDriver(Long id) {

@@ -30,6 +30,8 @@ public class AppUser implements UserDetails {
 
     String password;
 
+    String firebaseToken;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 

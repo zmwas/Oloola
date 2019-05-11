@@ -88,4 +88,21 @@ public interface OlolaaApi {
     ResponseEntity<List<Trip>> fetchTripsForLocation(
 @RequestBody FilterTripsDTO body
     );
+
+    @RequestMapping(value = "/user",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<AppUser> updateFirebaseToken(
+            @RequestBody UpdateFirebaseTokenDTO body
+    );
+
+    @RequestMapping(value = "/user",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<Trip> updatePrice(
+            @RequestBody UpdatePriceDTO body
+    );
+
 }

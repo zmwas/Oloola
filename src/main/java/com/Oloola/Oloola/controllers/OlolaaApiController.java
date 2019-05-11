@@ -84,4 +84,16 @@ public class OlolaaApiController implements OlolaaApi {
         List<Trip> trips = tripService.findClosestTrips(body);
         return new ResponseEntity<>(trips, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<AppUser> updateFirebaseToken(UpdateFirebaseTokenDTO body) {
+        AppUser appUser = userService.updateFirebaseToken(body);
+        return new ResponseEntity<>(appUser, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Trip> updatePrice(UpdatePriceDTO body) {
+        Trip trip = tripService.updatePrice(body);
+        return new ResponseEntity<>(trip, HttpStatus.CREATED);
+    }
 }

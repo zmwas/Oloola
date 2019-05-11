@@ -3,6 +3,7 @@ package com.Oloola.Oloola.services;
 import com.Oloola.Oloola.auth.JwtTokenProvider;
 import com.Oloola.Oloola.dto.AuthenticationRequest;
 import com.Oloola.Oloola.dto.CreateUserDTO;
+import com.Oloola.Oloola.dto.UpdateFirebaseTokenDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
 import com.Oloola.Oloola.models.AppUser;
 import com.Oloola.Oloola.models.Auth;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,6 +56,12 @@ public class UserService implements UserDetailsService {
         return appUser.get();
     }
 
+    public AppUser updateFirebaseToken(UpdateFirebaseTokenDTO body) {
+        AppUser appUser = loggedInUser();
+        appUser.setFirebaseToken(body.getFirebaseToken());
+        return userRepository.save(appUser);
+    }
+
     public Auth authenticateUser(AuthenticationRequest request) {
         String email = request.getEmail();
         String password = request.getPassword();
@@ -71,4 +79,20 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findByEmail(username);
     }
+
+    public AppUser loggedInUser() {
+        String username;
+        Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        Optional<AppUser> appUser = userRepository.findByEmail(username);
+        if (!appUser.isPresent()) {
+            throw new NotFoundException("user", username);
+        }
+        return appUser.get();
+    }
+
 }
