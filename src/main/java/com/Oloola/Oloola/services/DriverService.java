@@ -10,7 +10,6 @@ import com.Oloola.Oloola.repository.TruckRepository;
 import com.Oloola.Oloola.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -22,21 +21,20 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 @Validated
-public class DriverService {
+public class DriverService extends BaseService{
     DriverRepository driverRepository;
     TruckRepository truckRepository;
-    UserRepository userRepository;
 
     @Autowired
     public DriverService(DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository) {
+        super(userRepository);
         this.driverRepository = driverRepository;
         this.truckRepository = truckRepository;
-        this.userRepository = userRepository;
     }
 
     public Driver registerDriver(CreateDriverDTO driverDTO) {
         Truck truck = fetchTruck(driverDTO.getTruckId());
-        AppUser transporter = findTransporter(driverDTO.getTransporterId());
+        AppUser transporter = loggedInUser();
         Driver driver = driverDTO.from(truck, transporter);
         driver.setTruck(truck);
         return driverRepository.save(driver);
@@ -50,11 +48,8 @@ public class DriverService {
         return truck.get();
     }
 
-    private AppUser findTransporter(Long userId) {
-        Optional<AppUser> appUser = userRepository.findById(userId);
-        if (!appUser.isPresent()) {
-            throw new NotFoundException("user", String.valueOf(userId));
-        }
-        return appUser.get();
+    public List<Driver> fetchDrivers() {
+        return driverRepository.findByTransporter(loggedInUser());
     }
+
 }

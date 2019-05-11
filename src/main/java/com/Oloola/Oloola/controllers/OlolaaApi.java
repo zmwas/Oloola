@@ -84,9 +84,8 @@ public interface OlolaaApi {
     @RequestMapping(value = "/trip",
             produces = {"application/json"},
             consumes = {"application/json"},
-            method = RequestMethod.GET)
+            method = RequestMethod.POST)
     ResponseEntity<List<Trip>> fetchTripsForLocation(
-            @RequestParam String startLocation, @RequestParam String destination
-
+@RequestBody FilterTripsDTO body
     );
 }

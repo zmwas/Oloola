@@ -1,11 +1,18 @@
 package com.Oloola.Oloola.repository;
 
 import com.Oloola.Oloola.models.Trip;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.vividsolutions.jts.geom.Point;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface TripRepository extends PagingAndSortingRepository<Trip, Long> {
+import java.util.List;
+import java.util.Optional;
 
-//    @Query(value = "SELECT * from Trip t WHERE ST_Within(:point, circle)=true AND t.firstAvailableDate >= now() AND t.lastAvailableDate <= now()", nativeQuery = true)
-////    List<GeoResult<Trip>> findWithinRadius(Circle circle, Point point);
-
+public interface TripRepository extends JpaRepository<Trip, Long> {
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM trip as t " +
+                    "INNER JOIN location as l ON l.id = :collectionPointId " +
+                    "WHERE t.collection_point_id=:collectionPointId AND t.drop_off_point_id=:dropOffPointId " +
+                    "AND ST_DWithin(:userLocation, l.coordinates, 5000)")
+    Optional<List<Trip>> filterTrips(Long collectionPointId, Long dropOffPointId, Point userLocation);
 }

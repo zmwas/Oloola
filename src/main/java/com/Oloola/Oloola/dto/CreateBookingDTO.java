@@ -22,10 +22,11 @@ public class CreateBookingDTO {
 
     String tripId;
 
-    public Trip from(Trip trip, Location collectionPoint, Location dropOffPoint) {
+    public Trip from(Trip trip, Location collectionPoint, Location dropOffPoint, AppUser cargoMover) {
         trip.setCollectionPoint(collectionPoint);
         trip.setDropOffPoint(dropOffPoint);
         trip.setCargoType(cargoType);
+        trip.setCargoMover(cargoMover);
         return trip;
     }
 }

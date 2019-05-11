@@ -2,8 +2,12 @@ package com.Oloola.Oloola.services;
 
 import com.Oloola.Oloola.dto.CreateBookingDTO;
 import com.Oloola.Oloola.dto.CreateEmptyTripDTO;
+import com.Oloola.Oloola.dto.FilterTripsDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
-import com.Oloola.Oloola.models.*;
+import com.Oloola.Oloola.models.Driver;
+import com.Oloola.Oloola.models.Location;
+import com.Oloola.Oloola.models.Trip;
+import com.Oloola.Oloola.models.Truck;
 import com.Oloola.Oloola.repository.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,19 +32,18 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 @Validated
-public class TripService {
+public class TripService extends BaseService {
     TripRepository tripRepository;
     DriverRepository driverRepository;
     TruckRepository truckRepository;
-    UserRepository userRepository;
     LocationRepository locationRepository;
 
     @Autowired
     public TripService(TripRepository tripRepository, DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository, LocationRepository locationRepository) {
+        super(userRepository);
         this.tripRepository = tripRepository;
         this.driverRepository = driverRepository;
         this.truckRepository = truckRepository;
-        this.userRepository = userRepository;
         this.locationRepository = locationRepository;
     }
 
@@ -49,10 +51,9 @@ public class TripService {
     public Trip saveEmptyTrip(CreateEmptyTripDTO createEmptyTripDTO) {
         Truck truck = fetchTruck(createEmptyTripDTO.getTruckId());
         Driver driver = fetchDriver(createEmptyTripDTO.getDriverId());
-        AppUser transporter = fetchUser(1l);
         Location tripStart = fetchLocation(createEmptyTripDTO.getTripStart());
         Location destination = fetchLocation(createEmptyTripDTO.getTripDestination());
-        Trip trip = createEmptyTripDTO.from(truck, driver, tripStart, destination, transporter);
+        Trip trip = createEmptyTripDTO.from(truck, driver, tripStart, destination, loggedInUser());
         return tripRepository.save(trip);
     }
 
@@ -60,7 +61,7 @@ public class TripService {
         Location collectionPoint = fetchLocation(createBookingDTO.getCollectionPoint());
         Location dropOffPoint = fetchLocation(createBookingDTO.getDropOffPoint());
         Trip emptyTrip = findEmptyTrip(createBookingDTO.getTripId());
-        Trip trip = createBookingDTO.from(emptyTrip, collectionPoint, dropOffPoint);
+        Trip trip = createBookingDTO.from(emptyTrip, collectionPoint, dropOffPoint, loggedInUser());
         return tripRepository.save(trip);
     }
 
@@ -72,11 +73,18 @@ public class TripService {
         return trip.get();
     }
 
-    public List<Trip> findClosestTrips(Location collectionPoint) {
-        List<Trip> results = new ArrayList<>();
-//        List<GeoResult<Trip>> results = tripRepository.findWithinRadius(new Circle(collectionPoint.getPoint(), distance)
-//                , collectionPoint.getPoint());
-        return results;
+    public List<Trip> findClosestTrips(FilterTripsDTO body) {
+        GeometryFactory geometryFactory = new GeometryFactory();
+
+        Point point = geometryFactory.createPoint(new Coordinate(body.getLatitude(), body.getLongitude()));
+        Location collectionPoint = fetchLocation(body.getCollectionPoint());
+        Location dropOffPoint = fetchLocation(body.getDropOffPoint());
+        Optional<List<Trip>> results = tripRepository.filterTrips(collectionPoint.getId(), dropOffPoint.getId(), point);
+        if (!results.isPresent()) {
+            throw new NotFoundException("trip", body.getCollectionPoint());
+        }
+
+        return results.get();
     }
 
     private Driver fetchDriver(Long id) {
@@ -94,14 +102,6 @@ public class TripService {
             throw new NotFoundException("truck", String.valueOf(truckId));
         }
         return truck.get();
-    }
-
-    private AppUser fetchUser(Long userId) {
-        Optional<AppUser> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            throw new NotFoundException("User", String.valueOf(userId));
-        }
-        return user.get();
     }
 
     private Location fetchLocation(String name) {

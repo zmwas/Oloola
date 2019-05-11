@@ -2,7 +2,6 @@ package com.Oloola.Oloola.services;
 
 import com.Oloola.Oloola.dto.CreateTruckDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
-import com.Oloola.Oloola.models.AppUser;
 import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Truck;
 import com.Oloola.Oloola.repository.DriverRepository;
@@ -13,27 +12,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @Transactional
 @Validated
-public class TruckService {
-    TruckRepository truckRepository;
-    DriverRepository driverRepository;
-    UserRepository userRepository;
+public class TruckService extends BaseService{
+    private TruckRepository truckRepository;
+    private DriverRepository driverRepository;
 
     public TruckService(TruckRepository truckRepository, DriverRepository driverRepository, UserRepository userRepository) {
+        super(userRepository);
         this.truckRepository = truckRepository;
         this.driverRepository = driverRepository;
-        this.userRepository = userRepository;
     }
 
     public Truck createTruck(CreateTruckDTO createTruckDTO) {
         Driver driver = fetchDriver(Long.valueOf(createTruckDTO.getDriverId()));
-        AppUser transporter = findTransporter(Long.valueOf(createTruckDTO.getTransporterId()));
-        Truck truck = createTruckDTO.from(driver, transporter);
+        Truck truck = createTruckDTO.from(driver, loggedInUser());
         return truckRepository.save(truck);
     }
 
@@ -45,12 +43,8 @@ public class TruckService {
         return driver.get();
     }
 
-    private AppUser findTransporter(Long userId) {
-        Optional<AppUser> appUser = userRepository.findById(userId);
-        if (!appUser.isPresent()) {
-            throw new NotFoundException("user", String.valueOf(userId));
-        }
-        return appUser.get();
-    }
 
+    public List<Truck> fetchTrucks() {
+        return truckRepository.findByTransporter(loggedInUser());
+    }
 }

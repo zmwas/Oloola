@@ -16,10 +16,10 @@ import java.util.List;
 @RestController
 public class OlolaaApiController implements OlolaaApi {
 
-    DriverService driverService;
-    TruckService truckService;
-    UserService userService;
-    TripService tripService;
+    private DriverService driverService;
+    private TruckService truckService;
+    private UserService userService;
+    private TripService tripService;
 
     public OlolaaApiController(DriverService driverService, TruckService truckService, UserService userService, TripService tripService) {
         this.driverService = driverService;
@@ -69,16 +69,19 @@ public class OlolaaApiController implements OlolaaApi {
 
     @Override
     public ResponseEntity<List<Driver>> fetchDrivers() {
-        return null;
+        List<Driver> drivers = driverService.fetchDrivers();
+        return new ResponseEntity<>(drivers, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<Truck>> fetchTrucks() {
-        return null;
+        List<Truck> trucks = truckService.fetchTrucks();
+        return new ResponseEntity<>(trucks, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<Trip>> fetchTripsForLocation(String startLocation, String destination) {
-        return null;
+    public ResponseEntity<List<Trip>> fetchTripsForLocation(FilterTripsDTO body) {
+        List<Trip> trips = tripService.findClosestTrips(body);
+        return new ResponseEntity<>(trips, HttpStatus.OK);
     }
 }
