@@ -19,3 +19,8 @@ spring:
   jpa.hibernate.ddl-auto: create
   h2.console.enabled: true
   h2.console.path: /h2
+  servlet.multipart.enabled: true
+  servlet.multipart.file-size-threshold: 2KB
+  servlet.multipart.max-file-size: 200MB
+  servlet.multipart.max-request-size: 215MB
+file.upload-dir: /home/

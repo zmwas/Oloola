@@ -21,13 +21,11 @@ public class CreateDriverDTO {
 
     String idNumber;
 
-    String passPortPhotoUrl;
-
     Long truckId;
 
     Long transporterId;
 
-    public Driver from(Truck truck, AppUser transporter) {
+    public Driver from(Truck truck, AppUser transporter, String passPortPhotoUrl) {
         Driver driver = new Driver();
         driver.setTruck(truck);
         driver.setTransporter(transporter);

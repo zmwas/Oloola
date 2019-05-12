@@ -8,6 +8,7 @@ import com.Oloola.Oloola.models.Truck;
 import com.Oloola.Oloola.responses.AuthResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -46,16 +47,19 @@ public interface OlolaaApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<Trip> createBooking(
-            @RequestBody CreateBookingDTO body
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("json") CreateBookingDTO body
 
     );
 
     @RequestMapping(value = "/truck",
             produces = {"application/json"},
-            consumes = {"application/json"},
+            consumes = {"multipart/form-data"},
             method = RequestMethod.POST)
     ResponseEntity<Truck> createTruck(
-            @RequestBody CreateTruckDTO body
+            @RequestPart("photo") MultipartFile truckPhoto,
+            @RequestPart("sticker") MultipartFile insuranceSticker,
+            @RequestPart("json") CreateTruckDTO body
 
     );
 
@@ -64,7 +68,8 @@ public interface OlolaaApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<Driver> createDriver(
-            @RequestBody CreateDriverDTO body
+            @RequestPart("file") MultipartFile file,
+            @RequestPart CreateDriverDTO body
     );
 
     @RequestMapping(value = "/driver",
@@ -81,12 +86,12 @@ public interface OlolaaApi {
     ResponseEntity<List<Truck>> fetchTrucks(
     );
 
-    @RequestMapping(value = "/trip",
+    @RequestMapping(value = "/filterTrip",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<List<Trip>> fetchTripsForLocation(
-@RequestBody FilterTripsDTO body
+            @RequestBody FilterTripsDTO body
     );
 
     @RequestMapping(value = "/user",
@@ -97,7 +102,7 @@ public interface OlolaaApi {
             @RequestBody UpdateFirebaseTokenDTO body
     );
 
-    @RequestMapping(value = "/user",
+    @RequestMapping(value = "/trip",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.PUT)

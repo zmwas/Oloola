@@ -23,6 +23,6 @@ public class Location {
     Double latitude;
 
     Double longitude;
-
+    @Column(columnDefinition = "Geometry")
     Point coordinates;
 }

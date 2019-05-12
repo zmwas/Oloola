@@ -10,6 +10,7 @@ import com.Oloola.Oloola.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -50,20 +51,20 @@ public class OlolaaApiController implements OlolaaApi {
     }
 
     @Override
-    public ResponseEntity<Trip> createBooking(CreateBookingDTO body) {
-        Trip trip = tripService.saveTripBooking(body);
+    public ResponseEntity<Trip> createBooking(MultipartFile photo, CreateBookingDTO body) {
+        Trip trip = tripService.saveTripBooking(photo, body);
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Truck> createTruck(CreateTruckDTO body) {
-        Truck truck = truckService.createTruck(body);
+    public ResponseEntity<Truck> createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO body) {
+        Truck truck = truckService.createTruck(photo, sticker, body);
         return new ResponseEntity<>(truck, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Driver> createDriver(CreateDriverDTO body) {
-        Driver driver = driverService.registerDriver(body);
+    public ResponseEntity<Driver> createDriver(MultipartFile photo, CreateDriverDTO body) {
+        Driver driver = driverService.registerDriver(photo, body);
         return new ResponseEntity<>(driver, HttpStatus.CREATED);
     }
 

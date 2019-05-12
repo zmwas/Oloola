@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.services;
 
+import com.Oloola.Oloola.FileStorageProperties;
 import com.Oloola.Oloola.dto.CreateBookingDTO;
 import com.Oloola.Oloola.dto.CreateEmptyTripDTO;
 import com.Oloola.Oloola.dto.FilterTripsDTO;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,8 +39,8 @@ public class TripService extends BaseService {
     LocationRepository locationRepository;
 
     @Autowired
-    public TripService(TripRepository tripRepository, DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository, LocationRepository locationRepository) {
-        super(userRepository);
+    public TripService(TripRepository tripRepository, DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository, LocationRepository locationRepository, FileStorageProperties fileStorageProperties) {
+        super(userRepository, fileStorageProperties);
         this.tripRepository = tripRepository;
         this.driverRepository = driverRepository;
         this.truckRepository = truckRepository;
@@ -55,7 +57,7 @@ public class TripService extends BaseService {
         return tripRepository.save(trip);
     }
 
-    public Trip saveTripBooking(CreateBookingDTO createBookingDTO) {
+    public Trip saveTripBooking(MultipartFile photo, CreateBookingDTO createBookingDTO) {
         Location collectionPoint = fetchLocation(createBookingDTO.getCollectionPoint());
         Location dropOffPoint = fetchLocation(createBookingDTO.getDropOffPoint());
         Trip emptyTrip = findEmptyTrip(createBookingDTO.getTripId());

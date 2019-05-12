@@ -22,15 +22,12 @@ public class CreateTruckDTO {
 
     Double availableTonage;
 
-    String photoUrl;
-
-    String insuranceSticker;
 
     String ntsaCertificateNumber;
 
     String transporterId;
 
-    public Truck from(Driver driver, AppUser transporter) {
+    public Truck from(Driver driver, AppUser transporter, String insuranceSticker, String photoUrl) {
         Truck truck = new Truck();
         truck.setDriver(driver);
         truck.setTransporter(transporter);

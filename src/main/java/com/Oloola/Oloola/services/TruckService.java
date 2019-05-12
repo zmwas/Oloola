@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.services;
 
+import com.Oloola.Oloola.FileStorageProperties;
 import com.Oloola.Oloola.dto.CreateTruckDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
 import com.Oloola.Oloola.models.Driver;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,19 +22,30 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 @Validated
-public class TruckService extends BaseService{
+public class TruckService extends BaseService {
     private TruckRepository truckRepository;
     private DriverRepository driverRepository;
 
-    public TruckService(TruckRepository truckRepository, DriverRepository driverRepository, UserRepository userRepository) {
-        super(userRepository);
+    public TruckService(TruckRepository truckRepository, DriverRepository driverRepository, UserRepository userRepository, FileStorageProperties fileStorageProperties) {
+        super(userRepository, fileStorageProperties);
         this.truckRepository = truckRepository;
         this.driverRepository = driverRepository;
     }
 
-    public Truck createTruck(CreateTruckDTO createTruckDTO) {
+    public Truck createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO createTruckDTO) {
+        String stickerFileName = storeFile(sticker);
+        String insuranceSticker = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloads/")
+                .path(stickerFileName)
+                .toUriString();
+        String photoFileName = storeFile(photo);
+        String photoUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloads/")
+                .path(photoFileName)
+                .toUriString();
+
         Driver driver = fetchDriver(Long.valueOf(createTruckDTO.getDriverId()));
-        Truck truck = createTruckDTO.from(driver, loggedInUser());
+        Truck truck = createTruckDTO.from(driver, loggedInUser(), insuranceSticker, photoUrl);
         return truckRepository.save(truck);
     }
 

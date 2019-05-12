@@ -54,4 +54,7 @@ public class Trip {
     Double transportFees;
 
     Boolean isAvailable = true;
+
+    String cargoPictureUrl;
 }
+

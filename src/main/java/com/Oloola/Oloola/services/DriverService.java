@@ -1,5 +1,6 @@
 package com.Oloola.Oloola.services;
 
+import com.Oloola.Oloola.FileStorageProperties;
 import com.Oloola.Oloola.dto.CreateDriverDTO;
 import com.Oloola.Oloola.exceptions.NotFoundException;
 import com.Oloola.Oloola.models.AppUser;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,21 +24,28 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 @Validated
-public class DriverService extends BaseService{
+public class DriverService extends BaseService {
     DriverRepository driverRepository;
     TruckRepository truckRepository;
 
     @Autowired
-    public DriverService(DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository) {
-        super(userRepository);
+    public DriverService(DriverRepository driverRepository, TruckRepository truckRepository, UserRepository userRepository, FileStorageProperties fileStorageProperties) {
+        super(userRepository, fileStorageProperties);
         this.driverRepository = driverRepository;
         this.truckRepository = truckRepository;
     }
 
-    public Driver registerDriver(CreateDriverDTO driverDTO) {
+    public Driver registerDriver(MultipartFile photo, CreateDriverDTO driverDTO) {
+        String fileName = storeFile(photo);
+        String passport = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloads/")
+                .path(fileName)
+                .toUriString();
+
+
         Truck truck = fetchTruck(driverDTO.getTruckId());
         AppUser transporter = loggedInUser();
-        Driver driver = driverDTO.from(truck, transporter);
+        Driver driver = driverDTO.from(truck, transporter, passport);
         driver.setTruck(truck);
         return driverRepository.save(driver);
     }
