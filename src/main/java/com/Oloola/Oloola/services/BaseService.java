@@ -52,12 +52,16 @@ public class BaseService {
     }
 
     public AppUser loggedInUser() {
+        return getAppUser(userRepository);
+    }
+
+    static AppUser getAppUser(UserRepository userRepository) {
         String username;
         Authentication principal = SecurityContextHolder.getContext().getAuthentication();
         if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
         } else {
-            username = principal.toString();
+            username = principal.getName();
         }
         Optional<AppUser> appUser = userRepository.findByEmail(username);
         if (!appUser.isPresent()) {

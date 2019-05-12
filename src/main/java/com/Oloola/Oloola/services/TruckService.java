@@ -2,7 +2,6 @@ package com.Oloola.Oloola.services;
 
 import com.Oloola.Oloola.FileStorageProperties;
 import com.Oloola.Oloola.dto.CreateTruckDTO;
-import com.Oloola.Oloola.exceptions.NotFoundException;
 import com.Oloola.Oloola.models.Driver;
 import com.Oloola.Oloola.models.Truck;
 import com.Oloola.Oloola.repository.DriverRepository;
@@ -43,18 +42,17 @@ public class TruckService extends BaseService {
                 .path("/downloads/")
                 .path(photoFileName)
                 .toUriString();
-
-        Driver driver = fetchDriver(Long.valueOf(createTruckDTO.getDriverId()));
+        Driver driver = null;
+        if (createTruckDTO.getDriverId()!=null) {
+            driver = fetchDriver(Long.valueOf(createTruckDTO.getDriverId()));
+        }
         Truck truck = createTruckDTO.from(driver, loggedInUser(), insuranceSticker, photoUrl);
         return truckRepository.save(truck);
     }
 
     public Driver fetchDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
-        if (!driver.isPresent()) {
-            throw new NotFoundException("Driver", String.valueOf(id));
-        }
-        return driver.get();
+        return driver.orElse(null);
     }
 
 

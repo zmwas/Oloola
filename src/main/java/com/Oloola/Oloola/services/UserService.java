@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
+
+import static com.Oloola.Oloola.services.BaseService.getAppUser;
 
 @Service
 @Transactional
@@ -81,18 +82,7 @@ public class UserService implements UserDetailsService {
     }
 
     public AppUser loggedInUser() {
-        String username;
-        Authentication principal = SecurityContextHolder.getContext().getAuthentication();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-        Optional<AppUser> appUser = userRepository.findByEmail(username);
-        if (!appUser.isPresent()) {
-            throw new NotFoundException("user", username);
-        }
-        return appUser.get();
+        return getAppUser(userRepository);
     }
 
 }

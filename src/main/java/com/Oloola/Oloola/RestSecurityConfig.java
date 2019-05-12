@@ -40,7 +40,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/v1/ololaa/auth/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and().apply(new JwtConfigurer(jwtTokenProvider))
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

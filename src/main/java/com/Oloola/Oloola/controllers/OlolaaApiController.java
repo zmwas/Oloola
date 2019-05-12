@@ -5,12 +5,13 @@ import com.Oloola.Oloola.models.*;
 import com.Oloola.Oloola.responses.AuthResponse;
 import com.Oloola.Oloola.services.*;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -23,13 +24,15 @@ public class OlolaaApiController implements OlolaaApi {
     private UserService userService;
     private TripService tripService;
     private PushNotificationService pushNotificationService;
+    private BaseService baseService;
 
-    public OlolaaApiController(DriverService driverService, TruckService truckService, UserService userService, TripService tripService, PushNotificationService pushNotificationService) {
+    public OlolaaApiController(DriverService driverService, TruckService truckService, UserService userService, TripService tripService, PushNotificationService pushNotificationService, BaseService baseService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.userService = userService;
         this.tripService = tripService;
         this.pushNotificationService = pushNotificationService;
+        this.baseService = baseService;
     }
 
     @Override
@@ -131,6 +134,32 @@ public class OlolaaApiController implements OlolaaApi {
         }
         return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
     }
+
+    @Override
+    public ResponseEntity<Resource> downloadFile(String fileName, HttpServletRequest request) {
+        // Load file as Resource
+        Resource resource = baseService.loadFileAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+
+    }
+
 
     private String composeMessage(AppUser appUser, String message) {
         return appUser.getCompanyName() + message;
