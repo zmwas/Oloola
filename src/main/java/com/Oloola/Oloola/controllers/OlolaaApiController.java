@@ -3,16 +3,17 @@ package com.Oloola.Oloola.controllers;
 import com.Oloola.Oloola.dto.*;
 import com.Oloola.Oloola.models.*;
 import com.Oloola.Oloola.responses.AuthResponse;
-import com.Oloola.Oloola.services.DriverService;
-import com.Oloola.Oloola.services.TripService;
-import com.Oloola.Oloola.services.TruckService;
-import com.Oloola.Oloola.services.UserService;
+import com.Oloola.Oloola.services.*;
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class OlolaaApiController implements OlolaaApi {
@@ -21,12 +22,14 @@ public class OlolaaApiController implements OlolaaApi {
     private TruckService truckService;
     private UserService userService;
     private TripService tripService;
+    private PushNotificationService pushNotificationService;
 
-    public OlolaaApiController(DriverService driverService, TruckService truckService, UserService userService, TripService tripService) {
+    public OlolaaApiController(DriverService driverService, TruckService truckService, UserService userService, TripService tripService, PushNotificationService pushNotificationService) {
         this.driverService = driverService;
         this.truckService = truckService;
         this.userService = userService;
         this.tripService = tripService;
+        this.pushNotificationService = pushNotificationService;
     }
 
     @Override
@@ -53,6 +56,9 @@ public class OlolaaApiController implements OlolaaApi {
     @Override
     public ResponseEntity<Trip> createBooking(MultipartFile photo, CreateBookingDTO body) {
         Trip trip = tripService.saveTripBooking(photo, body);
+        String firebaseToken = trip.getTransporter().getFirebaseToken();
+        String message = composeMessage(trip.getCargoMover(), "has booked an empty trip");
+        sendNotification(firebaseToken, message);
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
@@ -95,6 +101,39 @@ public class OlolaaApiController implements OlolaaApi {
     @Override
     public ResponseEntity<Trip> updatePrice(UpdatePriceDTO body) {
         Trip trip = tripService.updatePrice(body);
+        String firebaseToken = trip.getCargoMover().getFirebaseToken();
+        String message = composeMessage(trip.getTransporter(), "has updated the price");
+        sendNotification(firebaseToken, message);
+
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<String> sendNotification(String firebaseToken, String message) {
+        JSONObject body = new JSONObject();
+        body.put("to", firebaseToken);
+        body.put("priority", "high");
+
+        JSONObject notification = new JSONObject();
+        notification.put("title", "Ololaa Notification");
+        notification.put("body", message);
+
+        body.put("notification", notification);
+
+        HttpEntity<String> request = new HttpEntity<>(body.toString());
+        CompletableFuture<String> pushNotification = pushNotificationService.send(request);
+        CompletableFuture.allOf(pushNotification).join();
+
+        try {
+            String firebaseResponse = pushNotification.get();
+            return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
+    }
+
+    private String composeMessage(AppUser appUser, String message) {
+        return appUser.getCompanyName() + message;
     }
 }

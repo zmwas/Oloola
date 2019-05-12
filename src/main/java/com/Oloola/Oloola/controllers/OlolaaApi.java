@@ -110,4 +110,11 @@ public interface OlolaaApi {
             @RequestBody UpdatePriceDTO body
     );
 
+    @RequestMapping(value = "/send",
+            produces = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<String> sendNotification(
+            String firebaseToken, String message
+    );
+
 }
