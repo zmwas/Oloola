@@ -117,7 +117,6 @@ public class OlolaaApiController implements OlolaaApi {
         JSONObject notification = new JSONObject();
         notification.put("title", "Ololaa Notification");
         notification.put("body", message);
-
         body.put("notification", notification);
 
         HttpEntity<String> request = new HttpEntity<>(body.toString());
