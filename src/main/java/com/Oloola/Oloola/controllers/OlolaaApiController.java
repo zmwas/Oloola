@@ -66,6 +66,12 @@ public class OlolaaApiController implements OlolaaApi {
     }
 
     @Override
+    public ResponseEntity<List<Trip>> fetchBookings() {
+        List<Trip> bookings = tripService.fetchBookings();
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<Truck> createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO body) {
         Truck truck = truckService.createTruck(photo, sticker, body);
         return new ResponseEntity<>(truck, HttpStatus.CREATED);

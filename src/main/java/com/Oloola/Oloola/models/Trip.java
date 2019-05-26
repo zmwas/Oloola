@@ -55,6 +55,7 @@ public class Trip {
 
     Boolean isAvailable = true;
 
+    Boolean isBooked = false;
     String cargoPictureUrl;
 }
 

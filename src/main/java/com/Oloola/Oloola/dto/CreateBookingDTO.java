@@ -27,6 +27,7 @@ public class CreateBookingDTO {
         trip.setDropOffPoint(dropOffPoint);
         trip.setCargoType(cargoType);
         trip.setCargoMover(cargoMover);
+        trip.setIsBooked(true);
         return trip;
     }
 }

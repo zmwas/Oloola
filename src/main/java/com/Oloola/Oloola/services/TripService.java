@@ -25,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +66,16 @@ public class TripService extends BaseService {
         return tripRepository.save(trip);
     }
 
+
+    public List<Trip> fetchBookings() {
+        List<Trip> bookings;
+        if (loggedInUser().getRoles().get(0).equals("transporter")) {
+            bookings = tripRepository.findByIsBookedAndTransporter(true, loggedInUser()).get();
+        } else {
+            bookings = tripRepository.findByIsBookedAndTransporter(true, loggedInUser()).get();
+        }
+        return bookings;
+    }
     private Trip findEmptyTrip(String id) {
         Optional<Trip> trip = tripRepository.findById(Long.valueOf(id));
         if (!trip.isPresent()) {

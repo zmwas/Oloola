@@ -54,6 +54,12 @@ public interface OlolaaApi {
 
     );
 
+    @RequestMapping(value = "/booking",
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Trip>> fetchBookings(
+    );
+
     @RequestMapping(value = "/truck",
             produces = {"application/json"},
             consumes = {"multipart/form-data"},
