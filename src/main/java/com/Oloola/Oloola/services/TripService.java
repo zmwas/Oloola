@@ -72,10 +72,11 @@ public class TripService extends BaseService {
         if (loggedInUser().getRoles().get(0).equals("transporter")) {
             bookings = tripRepository.findByIsBookedAndTransporter(true, loggedInUser()).get();
         } else {
-            bookings = tripRepository.findByIsBookedAndTransporter(true, loggedInUser()).get();
+            bookings = tripRepository.findByIsBookedAndCargoMover(true, loggedInUser()).get();
         }
         return bookings;
     }
+
     private Trip findEmptyTrip(String id) {
         Optional<Trip> trip = tripRepository.findById(Long.valueOf(id));
         if (!trip.isPresent()) {
