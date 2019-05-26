@@ -55,6 +55,10 @@ public class Trip {
 
     Boolean isAvailable = true;
 
+    Double units;
+
+    Double weight;
+
     Boolean isBooked = false;
     String cargoPictureUrl;
 }
