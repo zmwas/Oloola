@@ -1,9 +1,11 @@
 package com.Oloola.Oloola.controllers;
 
+import com.Oloola.Oloola.Views;
 import com.Oloola.Oloola.dto.*;
 import com.Oloola.Oloola.models.*;
 import com.Oloola.Oloola.responses.AuthResponse;
 import com.Oloola.Oloola.services.*;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
@@ -35,12 +37,14 @@ public class OlolaaApiController implements OlolaaApi {
         this.baseService = baseService;
     }
 
+    @JsonView(Views.Public.class)
     @Override
     public ResponseEntity<AppUser> signUp(CreateUserDTO body) {
         AppUser appUser = userService.createUser(body);
         return new ResponseEntity<>(appUser, HttpStatus.CREATED);
     }
 
+    @JsonView(Views.Public.class)
     @Override
     public ResponseEntity<AuthResponse> login(AuthenticationRequest body) {
         AuthResponse response = new AuthResponse();
@@ -50,12 +54,15 @@ public class OlolaaApiController implements OlolaaApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @JsonView(Views.Trip.class)
+
     @Override
     public ResponseEntity<Trip> createEmptyTrip(CreateEmptyTripDTO body) {
         Trip trip = tripService.saveEmptyTrip(body);
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
+    @JsonView(Views.Trip.class)
     @Override
     public ResponseEntity<Trip> createBooking(MultipartFile photo, CreateBookingDTO body) {
         Trip trip = tripService.saveTripBooking(photo, body);
@@ -65,23 +72,28 @@ public class OlolaaApiController implements OlolaaApi {
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
+    @JsonView(Views.Booking.class)
     @Override
     public ResponseEntity<List<Trip>> fetchBookings() {
         List<Trip> bookings = tripService.fetchBookings();
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @JsonView(Views.Truck.class)
     @Override
     public ResponseEntity<Truck> createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO body) {
         Truck truck = truckService.createTruck(photo, sticker, body);
         return new ResponseEntity<>(truck, HttpStatus.CREATED);
     }
 
+    @JsonView(Views.Driver.class)
     @Override
     public ResponseEntity<Driver> createDriver(MultipartFile photo, CreateDriverDTO body) {
         Driver driver = driverService.registerDriver(photo, body);
         return new ResponseEntity<>(driver, HttpStatus.CREATED);
     }
+
+    @JsonView(Views.Driver.class)
 
     @Override
     public ResponseEntity<List<Driver>> fetchDrivers() {
@@ -89,24 +101,28 @@ public class OlolaaApiController implements OlolaaApi {
         return new ResponseEntity<>(drivers, HttpStatus.OK);
     }
 
+    @JsonView(Views.Truck.class)
     @Override
     public ResponseEntity<List<Truck>> fetchTrucks() {
         List<Truck> trucks = truckService.fetchTrucks();
         return new ResponseEntity<>(trucks, HttpStatus.OK);
     }
 
+    @JsonView(Views.Trip.class)
     @Override
     public ResponseEntity<List<Trip>> fetchTripsForLocation(FilterTripsDTO body) {
         List<Trip> trips = tripService.findClosestTrips(body);
         return new ResponseEntity<>(trips, HttpStatus.OK);
     }
 
+    @JsonView(Views.Public.class)
     @Override
     public ResponseEntity<AppUser> updateFirebaseToken(UpdateFirebaseTokenDTO body) {
         AppUser appUser = userService.updateFirebaseToken(body);
         return new ResponseEntity<>(appUser, HttpStatus.CREATED);
     }
 
+    @JsonView({Views.Trip.class, Views.Booking.class})
     @Override
     public ResponseEntity<Trip> updatePrice(UpdatePriceDTO body) {
         Trip trip = tripService.updatePrice(body);

@@ -25,6 +25,8 @@ public class CreateTruckDTO {
 
     String ntsaCertificateNumber;
 
+    String truckType;
+
     public Truck from(Driver driver, AppUser transporter, String insuranceSticker, String photoUrl) {
         Truck truck = new Truck();
         truck.setDriver(driver);
@@ -35,6 +37,7 @@ public class CreateTruckDTO {
         truck.setNtsaCertificateNumber(ntsaCertificateNumber);
         truck.setTrailer(isTrailer);
         truck.setPhotoUrl(photoUrl);
+        truck.setTruckType(truckType);
         return truck;
     }
 }

@@ -1,5 +1,7 @@
 package com.Oloola.Oloola.models;
 
+import com.Oloola.Oloola.Views;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.vividsolutions.jts.geom.Point;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,13 +18,16 @@ import javax.persistence.*;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({Views.Trip.class, Views.Booking.class})
     Long id;
 
+    @JsonView({Views.Trip.class, Views.Booking.class})
     String name;
 
+    @JsonView({Views.Trip.class, Views.Booking.class})
     Double latitude;
 
+    @JsonView({Views.Trip.class, Views.Booking.class})
     Double longitude;
-    @Column(columnDefinition = "Geometry")
     Point coordinates;
 }

@@ -1,6 +1,8 @@
 package com.Oloola.Oloola.models;
 
 
+import com.Oloola.Oloola.Views;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,22 +18,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser implements UserDetails {
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
     String companyName;
 
+    @JsonView({Views.Public.class, Views.Trip.class})
     String kraPin;
 
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
     String email;
 
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
     String phoneNumber;
 
-    String password;
-
+    @JsonView(Views.Internal.class)
+    private String password;
+    @JsonView(Views.Public.class)
     String firebaseToken;
 
+    @JsonView(Views.Public.class)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 

@@ -1,5 +1,7 @@
 package com.Oloola.Oloola.models;
 
+import com.Oloola.Oloola.Views;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,26 +18,39 @@ import javax.persistence.*;
 public class Truck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({Views.Truck.class, Views.Trip.class})
+
     Long id;
 
     @OneToOne
+    @JsonView(Views.Truck.class)
 
     AppUser transporter;
+    @JsonView({Views.Truck.class, Views.Driver.class})
 
     String licensePlateNumber;
 
     @OneToOne
+    @JsonView(Views.Truck.class)
 
     Driver driver;
+    @JsonView(Views.Truck.class)
 
     boolean isTrailer;
+    @JsonView(Views.Truck.class)
 
     Double availableTonage;
+    @JsonView(Views.Truck.class)
 
     String photoUrl;
+    @JsonView(Views.Truck.class)
 
     String insuranceSticker;
+    @JsonView(Views.Truck.class)
 
     String ntsaCertificateNumber;
+    @JsonView({Views.Truck.class, Views.Trip.class})
+
+    String truckType;
 
 }
