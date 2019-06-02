@@ -79,6 +79,12 @@ public class OlolaaApiController implements OlolaaApi {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<List<Trip>> fetchBooking(Long id) {
+        Trip booking = tripService.findTripById(id);
+        return null;
+    }
+
     @JsonView(Views.Truck.class)
     @Override
     public ResponseEntity<Truck> createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO body) {

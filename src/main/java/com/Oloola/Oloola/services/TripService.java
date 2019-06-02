@@ -155,4 +155,12 @@ public class TripService extends BaseService {
         System.out.println(locationRepository.findByName(name).get().getCoordinates());
         return locationRepository.findByName(name).get();
     }
+
+    public Trip findTripById(Long id) {
+        Optional<Trip> trip = tripRepository.findById(id);
+        if (!trip.isPresent()) {
+            throw new NotFoundException("Trip", String.valueOf(id));
+        }
+        return trip.get();
+    }
 }

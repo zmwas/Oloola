@@ -60,6 +60,13 @@ public interface OlolaaApi {
     ResponseEntity<List<Trip>> fetchBookings(
     );
 
+    @RequestMapping(value = "/booking/{id}",
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<Trip>> fetchBooking(
+            @PathVariable Long id
+    );
+
     @RequestMapping(value = "/truck",
             produces = {"application/json"},
             consumes = {"multipart/form-data"},
