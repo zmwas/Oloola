@@ -83,5 +83,15 @@ public class Trip {
     @JsonView({Views.Booking.class})
 
     String cargoPictureUrl;
+
+    @JsonView({Views.Booking.class})
+
+    LocalDate firstCollectionDate;
+
+    @JsonView({Views.Booking.class})
+
+    LocalDate lastCollectionDate;
+
+
 }
 
