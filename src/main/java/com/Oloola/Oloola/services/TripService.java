@@ -91,7 +91,7 @@ public class TripService extends BaseService {
         Point point = geometryFactory.createPoint(new Coordinate(body.getLatitude(), body.getLongitude()));
         Location collectionPoint = fetchLocation(body.getCollectionPoint());
         Location dropOffPoint = fetchLocation(body.getDropOffPoint());
-        Optional<List<Trip>> results = tripRepository.filterTrips(collectionPoint.getId(), dropOffPoint.getId(), point);
+        Optional<List<Trip>> results = tripRepository.filterTrips(collectionPoint.getId(), dropOffPoint.getId(), body.getLatitude(), body.getLongitude());
         if (!results.isPresent()) {
             throw new NotFoundException("trip", body.getCollectionPoint());
         }
