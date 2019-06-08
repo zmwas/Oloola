@@ -22,16 +22,16 @@ public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class, Views.BookingDetails.class})
     String companyName;
 
-    @JsonView({Views.Public.class, Views.Trip.class})
+    @JsonView({Views.Public.class, Views.Trip.class, Views.BookingDetails.class})
     String kraPin;
 
-    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class, Views.BookingDetails.class})
     String email;
 
-    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class})
+    @JsonView({Views.Public.class, Views.Truck.class, Views.Driver.class, Views.Trip.class, Views.BookingDetails.class})
     String phoneNumber;
 
     @JsonView(Views.Internal.class)

@@ -40,6 +40,7 @@ public class CreateEmptyTripDTO {
         trip.setFirstAvailableDate(getDateFromString(firstAvailableDate));
         trip.setLastAvailableDate(getDateFromString(lastAvailableDate));
         trip.setAvailableTonage(availableTonage);
+        trip.setIsBooked(false);
         return trip;
     }
     private LocalDate getDateFromString(String date) {

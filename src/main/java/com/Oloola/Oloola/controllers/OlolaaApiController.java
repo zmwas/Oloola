@@ -72,7 +72,7 @@ public class OlolaaApiController implements OlolaaApi {
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
-    @JsonView({Views.Trip.class, Views.Booking.class})
+    @JsonView(Views.BookingDetails.class)
     @Override
     public ResponseEntity<List<Trip>> fetchBookings() {
         List<Trip> bookings = tripService.fetchBookings();

@@ -23,11 +23,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @Slf4j
@@ -59,20 +62,35 @@ public class TripService extends BaseService {
     }
 
     public Trip saveTripBooking(MultipartFile photo, CreateBookingDTO createBookingDTO) {
+        String fileName = storeFile(photo);
+        String photos = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/downloads/")
+                .path(fileName)
+                .toUriString();
+
         Location collectionPoint = fetchLocation(createBookingDTO.getCollectionPoint());
         Location dropOffPoint = fetchLocation(createBookingDTO.getDropOffPoint());
         Trip emptyTrip = findEmptyTrip(createBookingDTO.getTripId());
-        Trip trip = createBookingDTO.from(emptyTrip, collectionPoint, dropOffPoint, loggedInUser());
+        Trip trip = createBookingDTO.from(emptyTrip, collectionPoint, dropOffPoint, loggedInUser() , photos);
         return tripRepository.save(trip);
     }
 
 
     public List<Trip> fetchBookings() {
-        List<Trip> bookings;
+        List<Trip> bookings = new ArrayList<>();
         if (loggedInUser().getRoles().get(0).equals("transporter")) {
-            bookings = tripRepository.findByIsBookedAndTransporter(true, loggedInUser()).get();
+            Optional<List<Trip>> book = tripRepository.findByIsBookedAndTransporter(true, loggedInUser());
+            if (!book.isPresent()){
+               return bookings;
+            }
+            bookings = book.get();
         } else {
-            bookings = tripRepository.findByIsBookedAndCargoMover(true, loggedInUser()).get();
+            Optional<List<Trip>> book = tripRepository.findByIsBookedAndCargoMover(true, loggedInUser());
+            if (!book.isPresent()){
+                return bookings;
+            }
+            bookings = book.get();
+
         }
         return bookings;
     }
@@ -87,16 +105,11 @@ public class TripService extends BaseService {
 
     public List<Trip> findClosestTrips(FilterTripsDTO body) {
         GeometryFactory geometryFactory = new GeometryFactory();
-
-        Point point = geometryFactory.createPoint(new Coordinate(body.getLatitude(), body.getLongitude()));
-        Location collectionPoint = fetchLocation(body.getCollectionPoint());
+        List<Trip> trips = new ArrayList<>();
         Location dropOffPoint = fetchLocation(body.getDropOffPoint());
-        Optional<List<Trip>> results = tripRepository.filterTrips(collectionPoint.getId(), dropOffPoint.getId(), body.getLatitude(), body.getLongitude());
-        if (!results.isPresent()) {
-            throw new NotFoundException("trip", body.getCollectionPoint());
-        }
+        Optional<List<Trip>> results = tripRepository.filterTrips(body.getLatitude(), body.getLongitude(), dropOffPoint.getLongitude(), dropOffPoint.getLongitude());
+        return results.orElse(trips);
 
-        return results.get();
     }
 
     public Trip updatePrice(UpdatePriceDTO body) {

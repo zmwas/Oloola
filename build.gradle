@@ -15,6 +15,11 @@ configurations {
     }
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
+
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/snapshot' }

@@ -35,7 +35,7 @@ public class CreateBookingDTO {
     String lastCollectionDate;
 
 
-    public Trip from(Trip trip, Location collectionPoint, Location dropOffPoint, AppUser cargoMover) {
+    public Trip from(Trip trip, Location collectionPoint, Location dropOffPoint, AppUser cargoMover, String PhotoUrl) {
         trip.setCollectionPoint(collectionPoint);
         trip.setDropOffPoint(dropOffPoint);
         trip.setCargoType(cargoType);
@@ -45,6 +45,8 @@ public class CreateBookingDTO {
         trip.setIsBooked(true);
         trip.setFirstCollectionDate(getDateFromString(firstCollectionDate));
         trip.setLastCollectionDate(getDateFromString(lastCollectionDate));
+        trip.setCargoPictureUrl(PhotoUrl);
+        trip.setIsBooked(true);
         return trip;
     }
 

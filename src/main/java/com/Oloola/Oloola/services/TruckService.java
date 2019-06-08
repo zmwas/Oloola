@@ -34,7 +34,7 @@ public class TruckService extends BaseService {
     public Truck createTruck(MultipartFile photo, MultipartFile sticker, CreateTruckDTO createTruckDTO) {
         String stickerFileName = storeFile(sticker);
         String insuranceSticker = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloads/")
+                .path("/api/v1/downloads/")
                 .path(stickerFileName)
                 .toUriString();
         String photoFileName = storeFile(photo);

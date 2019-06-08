@@ -41,6 +41,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/downloads/**").permitAll()
                 .anyRequest().authenticated()
                 .and().apply(new JwtConfigurer(jwtTokenProvider))
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

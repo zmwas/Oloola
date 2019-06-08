@@ -19,4 +19,8 @@ public class Views {
     public static class Booking {
     }
 
+    public static class BookingDetails {
+
+    }
+
 }

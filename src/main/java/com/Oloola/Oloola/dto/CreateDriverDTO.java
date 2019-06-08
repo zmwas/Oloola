@@ -23,8 +23,6 @@ public class CreateDriverDTO {
 
     Long truckId;
 
-    Long transporterId;
-
     public Driver from(Truck truck, AppUser transporter, String passPortPhotoUrl) {
         Driver driver = new Driver();
         driver.setTruck(truck);

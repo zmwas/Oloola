@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class Truck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({Views.Truck.class, Views.Trip.class})
+    @JsonView({Views.Truck.class, Views.Trip.class, Views.BookingDetails.class})
 
     Long id;
 
@@ -26,7 +26,7 @@ public class Truck {
     @JsonView(Views.Truck.class)
 
     AppUser transporter;
-    @JsonView({Views.Truck.class, Views.Driver.class})
+    @JsonView({Views.Truck.class, Views.Driver.class, Views.BookingDetails.class})
 
     String licensePlateNumber;
 
@@ -40,7 +40,7 @@ public class Truck {
     @JsonView(Views.Truck.class)
 
     Double availableTonage;
-    @JsonView(Views.Truck.class)
+    @JsonView({Views.Truck.class,  Views.BookingDetails.class})
 
     String photoUrl;
     @JsonView(Views.Truck.class)

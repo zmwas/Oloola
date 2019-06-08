@@ -37,7 +37,7 @@ public class DriverService extends BaseService {
     public Driver registerDriver(MultipartFile photo, CreateDriverDTO driverDTO) {
         String fileName = storeFile(photo);
         String passport = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloads/")
+                .path("/api/v1/downloads/")
                 .path(fileName)
                 .toUriString();
 
