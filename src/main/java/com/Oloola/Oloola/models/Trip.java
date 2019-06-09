@@ -20,26 +20,26 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView({Views.Trip.class, Views.BookingDetails.class})
     Long id;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     @OneToOne
     Truck truck;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     @OneToOne
     Driver driver;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     @ManyToOne()
     @PrimaryKeyJoinColumn
     AppUser transporter;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     LocalDate firstAvailableDate;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     LocalDate lastAvailableDate;
-    @JsonView({Views.Trip.class})
+    @JsonView({Views.Trip.class, Views.BookingDetails.class})
 
     Double availableTonage;
     @JsonView({Views.Trip.class})

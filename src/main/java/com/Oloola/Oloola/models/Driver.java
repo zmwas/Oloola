@@ -21,7 +21,7 @@ public class Driver {
     @JsonView({Views.Truck.class, Views.Driver.class})
     Long id;
 
-    @JsonView({Views.Driver.class, Views.Trip.class})
+    @JsonView({Views.Driver.class, Views.Trip.class, Views.BookingDetails.class})
     String name;
 
     @JsonView({Views.Truck.class, Views.Driver.class})
@@ -32,7 +32,7 @@ public class Driver {
 
     @JsonView({Views.Truck.class, Views.Driver.class})
     String idNumber;
-    @JsonView(Views.Driver.class)
+    @JsonView({Views.Driver.class, Views.BookingDetails.class})
 
     String passPortPhotoUrl;
     @JsonView(Views.Driver.class)

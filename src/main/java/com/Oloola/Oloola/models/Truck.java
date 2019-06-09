@@ -37,19 +37,19 @@ public class Truck {
     @JsonView(Views.Truck.class)
 
     boolean isTrailer;
-    @JsonView(Views.Truck.class)
+    @JsonView({Views.Truck.class})
 
     Double availableTonage;
-    @JsonView({Views.Truck.class,  Views.BookingDetails.class})
+    @JsonView({Views.Truck.class, Views.BookingDetails.class})
 
     String photoUrl;
-    @JsonView(Views.Truck.class)
+    @JsonView({Views.Truck.class, Views.BookingDetails.class})
 
     String insuranceSticker;
     @JsonView(Views.Truck.class)
 
     String ntsaCertificateNumber;
-    @JsonView({Views.Truck.class, Views.Trip.class})
+    @JsonView({Views.Truck.class, Views.Trip.class, Views.BookingDetails.class})
 
     String truckType;
 

@@ -21,7 +21,7 @@ public class Location {
     @JsonView({Views.Trip.class, Views.Booking.class})
     Long id;
 
-    @JsonView({Views.Trip.class, Views.Booking.class})
+    @JsonView({Views.Trip.class, Views.Booking.class, Views.BookingDetails.class})
     String name;
 
     @JsonView({Views.Trip.class, Views.Booking.class})

@@ -39,7 +39,7 @@ public class TruckService extends BaseService {
                 .toUriString();
         String photoFileName = storeFile(photo);
         String photoUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloads/")
+                .path("/api/v1/downloads/")
                 .path(photoFileName)
                 .toUriString();
         Driver driver = null;
