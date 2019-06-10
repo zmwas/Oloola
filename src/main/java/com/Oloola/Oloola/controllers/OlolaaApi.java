@@ -89,14 +89,12 @@ public interface OlolaaApi {
 
     @RequestMapping(value = "/driver",
             produces = {"application/json"},
-            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Driver>> fetchDrivers(
     );
 
     @RequestMapping(value = "/truck",
             produces = {"application/json"},
-            consumes = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<List<Truck>> fetchTrucks(
     );

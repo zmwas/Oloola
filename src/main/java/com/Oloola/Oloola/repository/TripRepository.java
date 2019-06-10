@@ -1,9 +1,7 @@
 package com.Oloola.Oloola.repository;
 
 import com.Oloola.Oloola.models.AppUser;
-import com.Oloola.Oloola.models.Location;
 import com.Oloola.Oloola.models.Trip;
-import com.vividsolutions.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
