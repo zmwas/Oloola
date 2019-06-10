@@ -7,7 +7,7 @@ logging:
 server.port: 8019
 
 spring:
-  datasource.url: jdbc:postgresql://dburl:5432/oloola
+  datasource.url: jdbc:postgresql://localhost:5432/oloola
   datasource.driverClassName: org.postgresql.Driver
   security.basic.enable: false
   management.security.enabled: false
