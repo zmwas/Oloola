@@ -1,10 +1,31 @@
 version: '3'
 
 services:
+
+  nginx:
+    container_name: some-nginx
+    image: nginx:1.13
+    restart: always
+    ports:
+    - 80:80
+    - 443:443
+    volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+    - app
+  db:
+    image: kartoza/postgis
+    ports:
+    - "5432:5432"
+    environment:
+    - POSTGRES_USER=oloola
+    - POSTGRES_DB=oloola
+    - POSTGRES_PASSWORD=oloola
+
   app:
     image: com.oloola:latest
     ports:
     - "8019:8019"
-    extra_hosts:
-    - "dburl:172.17.0.1"
+    depends_on:
+    - db
 
