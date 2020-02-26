@@ -83,7 +83,7 @@ public interface OlolaaApi {
             consumes = {"multipart/form-data"},
             method = RequestMethod.POST)
     ResponseEntity<Driver> createDriver(
-            @RequestPart("file") MultipartFile file,
+            @RequestPart("photo") MultipartFile file,
             CreateDriverDTO body
     );
 
