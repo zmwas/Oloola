@@ -15,5 +15,4 @@ It tracks trips made by trucks using google-maps-api.
 #How to run 
 - Run ```./gradlew docker``` to build the docker image
 - Run ```docker-compose up``` to run the docker application
-- 
 
