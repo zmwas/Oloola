@@ -3,7 +3,7 @@
 Oloola is an api to manage drivers and trucks. 
 It tracks trips made by trucks using google places api.
 
-##Technologies
+#Technologies
 - Spring boot
 - Docker
 - Gradle
